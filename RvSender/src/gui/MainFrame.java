@@ -9,11 +9,13 @@ import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 /**
  * Created by JLyc.Development@gmail.com on 1/19/2016.
  */
-public class MainFrame extends JFrame implements ActionListener {
+public class MainFrame extends JFrame implements ActionListener, FocusListener {
     private static final String NEW_MSG = "\n******* New MSG ********\n";
 
     private static JTextField rvNetwork;
@@ -70,7 +72,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
     public MainFrame() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setName("RvTool");
+        this.setTitle("RvTool");
         this.setMinimumSize(new Dimension(500, 400));
         this.getRootPane().setContentPane(mainPanel());
 
@@ -82,7 +84,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(11, 2));
+        mainPanel.setLayout(new GridLayout(12, 2));
 
         JLabel rvDeamonText = new JLabel("RvDeamon");
         rvDeamon = new JTextField("7500");
@@ -98,6 +100,8 @@ public class MainFrame extends JFrame implements ActionListener {
 
         JScrollPane jScrollPane = new JScrollPane();
         jScrollPane.getViewport().add(rvMsg);
+        status.setBackground(Color.BLACK);
+        status.setForeground(Color.WHITE);
         JScrollPane jScrollPaneStatus = new JScrollPane();
         jScrollPaneStatus.getViewport().add(status);
         DefaultCaret caret = (DefaultCaret) status.getCaret();
@@ -120,11 +124,15 @@ public class MainFrame extends JFrame implements ActionListener {
         JLabel received = new JLabel("Received msg");
         JScrollPane jScrollPanelReceived = new JScrollPane();
         jScrollPanelReceived.getViewport().add(receivedMsg);
-
+        replyMsg.addFocusListener(this);
+        receivedMsg.addFocusListener(this);
+        status.addFocusListener(this);
+        rvMsg.addFocusListener(this);
 
         JScrollPane jScrollPanelReply = new JScrollPane();
         jScrollPanelReply.getViewport().add(replyMsg);
-
+        JTextField placeholder = new JTextField("");
+        placeholder.setEditable(false);
         mainPanel.add(rvDeamonText);
         mainPanel.add(rvDeamon);
         mainPanel.add(rvNetworkText);
@@ -137,8 +145,10 @@ public class MainFrame extends JFrame implements ActionListener {
         mainPanel.add(isConnected);
         mainPanel.add(rvMsgText);
         mainPanel.add(jScrollPane);
-        mainPanel.add(jScrollPaneStatus);
+        mainPanel.add(placeholder);
         mainPanel.add(sendMsg);
+        mainPanel.add(new JLabel("Output window"));
+        mainPanel.add(jScrollPaneStatus);
         mainPanel.add(listenerText);
         mainPanel.add(listener);
         mainPanel.add(received);
@@ -177,7 +187,6 @@ public class MainFrame extends JFrame implements ActionListener {
             connect.setText("Connect");
             sendMsg.setEnabled(false);
             listener.setEnabled(false);
-            status.setBackground(this.getBackground());
         }
 
         if (e.getActionCommand().equals("Send")) {
@@ -210,5 +219,34 @@ public class MainFrame extends JFrame implements ActionListener {
                 status.append(e.getMessage());
             }
         }
+    }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+
+        JTextArea focus = (JTextArea) e.getSource();
+            focus.transferFocus();
+        JTextArea textArea = new JTextArea(focus.getText());
+        if(focus.equals(status)){
+            textArea.setEditable(false);
+            textArea.setBackground(Color.BLACK);
+            textArea.setForeground(Color.WHITE);
+        }
+        if(focus.equals(receivedMsg)){
+            textArea.setEditable(false);
+        }
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        scrollPane.setPreferredSize( new Dimension( 500, 500 ) );
+        JOptionPane.showMessageDialog(null, scrollPane, "RV message",
+                JOptionPane.PLAIN_MESSAGE);
+        focus.setText(textArea.getText());
+        focus.transferFocus();
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+
     }
 }

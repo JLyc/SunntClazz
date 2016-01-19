@@ -75,7 +75,6 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
         try {
             if(rvdTransport==null) {
                 MainFrame.getStatus().append("No Rvd Transport crated\nMsg not send");
-                MainFrame.getStatus().setBackground(Color.RED);
                 isListening=false;
                 return;
             }
