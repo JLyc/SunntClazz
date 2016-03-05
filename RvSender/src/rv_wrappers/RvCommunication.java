@@ -1,11 +1,14 @@
 package rv_wrappers;
 
+import com.logica.eai.test.bw.BWConstants;
+import com.logica.eai.test.bw.IntegrationRuntimeException;
 import com.tibco.tibrv.*;
 import gui.MainFrame;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.awt.*;
+import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -36,12 +39,28 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
         MainFrame.getStatus().append("\nInitializing RV connection...");
         try {
             Tibrv.open(Tibrv.IMPL_NATIVE);
-            rvdTransport = new TibrvRvdTransport(MainFrame.getRvService().getText(),
-                    MainFrame.getRvNetwork().getText(), MainFrame.getRvDeamon().getText());
+            String service = null;
+            String network = null;
+            String deamon = null;
+            if(MainFrame.getRvService().getText().length()>0){
+                service = MainFrame.getRvService().getText();
+            }
+            if(MainFrame.getRvNetwork().getText().length()>0){
+                network = MainFrame.getRvNetwork().getText();
+            }
+            if(MainFrame.getRvService().getText().length()>0){
+                deamon = MainFrame.getRvDeamon().getText();
+            }
+            System.out.println("rvdTransport");
+            rvdTransport = new TibrvRvdTransport(service,
+                   network, deamon);
+            System.out.println("rvdTransport");
+
             if (rvdTransport == null) {
-                LOG.error("RV transport is not initialized!");
+                MainFrame.getStatus().append("RV transport is not initialized!");
             }
             rvQueue = new TibrvQueue();
+            System.out.println(MainFrame.getRvSubject().getText());
             tibrvListener = new TibrvListener(rvQueue, this, rvdTransport, MainFrame.getRvSubject().getText(),null);
             MainFrame.getStatus().append("\nRV Listening on subject: " + MainFrame.getRvSubject().getText());
         } catch (TibrvException e) {
@@ -81,9 +100,32 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
                 rvdTransport.send(new RVMessageInterfaceWraper(xmlMsg));
 
         } catch (TibrvException e) {
-            MainFrame.getStatus().append(e.getMessage());
+            MainFrame.getStatus().append("sendMsg error "+ e.getMessage());
         }
     }
+
+    public void sendMsgNew(String xmlMsg){
+            TibrvMsg message = new TibrvMsg();
+            try
+            {
+                message.add(
+                        BWConstants.RV_CONTENT_TYPE,
+                        new TibrvXml(
+                                xmlMsg.trim().getBytes("UTF-8")
+                        )
+                );
+                message.setSendSubject(MainFrame.getRvSubject().getText());
+                rvdTransport.send(message);
+
+            }
+            catch (UnsupportedEncodingException ueExc)
+            {
+                throw new IntegrationRuntimeException(ueExc);
+            } catch (TibrvException e) {
+                e.printStackTrace();
+            }
+    }
+
 
     public void sendReply(RVMessageInterfaceWraper responseMsg, RVMessageInterfaceWraper sourceMsg) {
         try {
@@ -121,6 +163,6 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
     @Override
     public void onMsg(TibrvListener tibrvListener, TibrvMsg tibrvMsg) {
         MainFrame.getRvMsg().setText(tibrvMsg.toString());
-        MainFrame.newMsg((RVMessageInterfaceWraper) tibrvMsg);
+        MainFrame.newMsg(new RVMessageInterfaceWraper(tibrvMsg));
     }
 }

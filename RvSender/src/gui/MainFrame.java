@@ -87,16 +87,18 @@ public class MainFrame extends JFrame implements ActionListener, FocusListener {
         mainPanel.setLayout(new GridLayout(12, 2));
 
         JLabel rvDeamonText = new JLabel("RvDeamon");
-        rvDeamon = new JTextField("7500");
+        rvDeamon = new JTextField("tcp:7531");
         JLabel rvNetworkText = new JLabel("RvNetwork");
         rvNetwork = new JTextField("");
         JLabel rvServiceText = new JLabel("RvService");
-        rvService = new JTextField("tcp:7500");
+        rvService = new JTextField("7531");
         JLabel rvSubjectText = new JLabel("RvSubject");
-        rvSubject = new JTextField("TMSK.CRM.MSG");
+        rvSubject = new JTextField("TMSK.TST.CRM.CMN.CUSTOMER");
         JLabel rvMsgText = new JLabel("RvMsg");
-        rvMsg = new JTextArea("<empty_msg>\n\n" +
-                "</empty_msg>");
+        rvMsg = new JTextArea("<snmp-request-message>\n" +
+                "          <alias>48575443EBFAA923</alias>\n" +
+                "          <operation>getStatus</operation>\n" +
+                "        </snmp-request-message>");
 
         JScrollPane jScrollPane = new JScrollPane();
         jScrollPane.getViewport().add(rvMsg);
@@ -191,7 +193,7 @@ public class MainFrame extends JFrame implements ActionListener, FocusListener {
 
         if (e.getActionCommand().equals("Send")) {
             RvCommunication rvCommunication = RvCommunication.getInstance();
-            rvCommunication.sendMsg(rvMsg.getText());
+            rvCommunication.sendMsgNew(rvMsg.getText());
         }
 
 
@@ -223,7 +225,6 @@ public class MainFrame extends JFrame implements ActionListener, FocusListener {
 
     @Override
     public void focusGained(FocusEvent e) {
-
         JTextArea focus = (JTextArea) e.getSource();
             focus.transferFocus();
         JTextArea textArea = new JTextArea(focus.getText());
