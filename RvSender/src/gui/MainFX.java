@@ -51,8 +51,8 @@ public class MainFX extends Application {
             public void handle(ActionEvent event) {
                 for (TitledPane titledPane : accordion.getPanes()) {
                     if(titledPane.getText().equals("Deamon: 0")){
-//                        accordion.getPanes().remove(titledPane);
                         titledPane.setVisible(false);
+
                     }
 
                 }

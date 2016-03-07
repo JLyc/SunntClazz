@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 
 /**
@@ -78,12 +79,8 @@ public class RvDeamon extends TitledPane {
         delete.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                for (TitledPane titledPane : accordion.getPanes()) {
-                    if(titledPane.getText().equals(name)){
-                        accordion.getPanes().remove(titledPane);
-                        titledPane.setVisible(false);
-                    }
-                }
+                accordion.getExpandedPane().setVisible(false);
+                accordion.getPanes().remove(accordion.getExpandedPane());
             }
         });
 
@@ -92,6 +89,12 @@ public class RvDeamon extends TitledPane {
 
     public void addToAccordion(Accordion accordion) {
         this.accordion=accordion;
+        for (TitledPane tilePane : accordion.getPanes()) {
+            if (!tilePane.isVisible()) {
+
+            }
+        }
         accordion.getPanes().add(this);
+        accordion.setExpandedPane(this);
     }
 }
