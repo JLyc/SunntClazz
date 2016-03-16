@@ -1,5 +1,6 @@
 package gui;
 
+import com.sun.xml.internal.txw2.TXW;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -25,6 +26,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import rv_wrappers.RvCommunication;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,9 +37,11 @@ import java.awt.*;
 public class MainFX extends Application {
 
 
+    private TextField rvDeamonName;
     private TextField rvDeamon;
     private TextField rvNetwork;
     private TextField rvService;
+    private TextField rvSubject;
 
     private Accordion accordion = new Accordion();
 
@@ -59,7 +63,7 @@ public class MainFX extends Application {
 
     private void messagePanel(GridPane gridPane) {
         Label msgLabel = new Label("Msg");
-        GridPane.setConstraints(msgLabel, 1, 5);
+        GridPane.setConstraints(msgLabel, 1, 7);
         final TextArea msgText = new TextArea();
         msgText.setPromptText("\t Enter your randevousz msg here");
         msgText.setPrefSize(244, 180);
@@ -73,28 +77,31 @@ public class MainFX extends Application {
                 }
             }
         });
-        GridPane.setConstraints(msgText, 1, 6, 2, 1);
+        GridPane.setConstraints(msgText, 1, 8, 2, 1);
         gridPane.getChildren().addAll(msgLabel, msgText);
     }
 
     private void deamonInstances(GridPane gridPane) {
         Button testConnection = new Button("Test Connection");
-        GridPane.setConstraints(testConnection, 2, 4);
+        GridPane.setConstraints(testConnection, 2, 6);
         testConnection.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                RvCommunication rvCommunicationDeamon = new RvCommunication(rvDeamonName.getText(),rvDeamon.getText(),rvNetwork.getText(),rvService.getText(),rvSubject.getText());
+                rvCommunicationDeamon.open();
+                rvCommunicationDeamon.close();
             }
         });
 
         Button addDeamon = new Button("Add Deamon");
-        GridPane.setConstraints(addDeamon, 1, 4);
+        GridPane.setConstraints(addDeamon, 1, 6);
         addDeamon.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                int index = accordion.getPanes().size();
+                RvCommunication rvCommunicationDeamon = new RvCommunication(rvDeamonName.getText(),rvDeamon.getText(),rvNetwork.getText(),rvService.getText(),rvSubject.getText());
+                rvCommunicationDeamon.open();
                 GridPane layut = new GridPane();
-                RvDeamon titledPane = new RvDeamon("Deamon: " + index, layut, rvDeamon.getText(), rvNetwork.getText(), rvService.getText());
+                RvDeamon titledPane = new RvDeamon(rvCommunicationDeamon , layut, rvDeamon.getText(), rvNetwork.getText(), rvService.getText());
                 titledPane.addToAccordion(accordion);
             }
         });
@@ -103,27 +110,40 @@ public class MainFX extends Application {
     }
 
     private void deamonProperties(GridPane gridPane) {
-        Label RvDeamonLabel = new Label("RvDeamon");
-        GridPane.setConstraints(RvDeamonLabel, 1, 1);
-        Label RvNetworkLabel = new Label("RvNetwork");
-        GridPane.setConstraints(RvNetworkLabel, 1, 2);
-        Label RvServiceLabel = new Label("RvService");
-        GridPane.setConstraints(RvServiceLabel, 1, 3);
+        Label rvDeamonNameLabel = new Label("RvName");
+        GridPane.setConstraints(rvDeamonNameLabel, 1, 1);
+        Label rvDeamonLabel = new Label("RvDeamon");
+        GridPane.setConstraints(rvDeamonLabel, 1, 2);
+        Label rvNetworkLabel = new Label("RvNetwork");
+        GridPane.setConstraints(rvNetworkLabel, 1, 3);
+        Label rvServiceLabel = new Label("RvService");
+        GridPane.setConstraints(rvServiceLabel, 1, 4);
+        Label rvSubjectLabel = new Label("RvSubject");
+        GridPane.setConstraints(rvSubjectLabel, 1, 5);
 
+
+        rvDeamonName = new TextField("RvName");
+        GridPane.setConstraints(rvDeamonName, 2, 1);
         rvDeamon = new TextField("RvDeamon");
-        GridPane.setConstraints(rvDeamon, 2, 1);
+        GridPane.setConstraints(rvDeamon, 2, 2);
         rvNetwork = new TextField("RvNetwork");
-        GridPane.setConstraints(rvNetwork, 2, 2);
+        GridPane.setConstraints(rvNetwork, 2, 3);
         rvService = new TextField("RvService");
-        GridPane.setConstraints(rvService, 2, 3);
+        GridPane.setConstraints(rvService, 2, 4);
+        rvSubject = new TextField("RvSubject");
+        GridPane.setConstraints(rvSubject, 2, 5);
 
 
         gridPane.getChildren().addAll(
-                RvDeamonLabel,
+                rvDeamonNameLabel,
+                rvDeamonName,
+                rvSubjectLabel,
+                rvSubject,
+                rvDeamonLabel,
                 rvDeamon,
-                RvNetworkLabel,
+                rvNetworkLabel,
                 rvNetwork,
-                RvServiceLabel,
+                rvServiceLabel,
                 rvService
         );
     }

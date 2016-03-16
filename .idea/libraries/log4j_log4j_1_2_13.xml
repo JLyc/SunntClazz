@@ -3,9 +3,11 @@
     <properties maven-id="log4j:log4j:1.2.13" />
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/AntTest/lib/log4j-1.2.13.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AntTest/lib/log4j-1.2.13.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
+      <root url="jar://$PROJECT_DIR$/AntTest/lib/log4j-1.2.13-sources.jar!/" />
       <root url="jar://$PROJECT_DIR$/AntTest/lib/log4j-1.2.13-sources.jar!/" />
     </SOURCES>
   </library>

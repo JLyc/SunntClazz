@@ -15,6 +15,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
+import rv_wrappers.RvCommunication;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +24,9 @@ import java.awt.*;
  * Created by JLyc on 3/6/2016.
  */
 public class RvDeamon extends TitledPane {
+
+    RvCommunication rvCommunicationDeamon;
+
     String name;
 
     String rvDeamon = null;
@@ -32,10 +36,11 @@ public class RvDeamon extends TitledPane {
     GridPane gridPane = new GridPane();
     Accordion accordion;
 
-    public RvDeamon(String s, GridPane layut, String rvDeamon, String rvNetwork, String rvService) {
-        super(s, layut);
+    public RvDeamon(RvCommunication rvCommunicationDeamon, GridPane layut, String rvDeamon, String rvNetwork, String rvService) {
+        super("Deamon: "+ rvCommunicationDeamon.getName(), layut);
 
-        name = s;
+        this.rvCommunicationDeamon = rvCommunicationDeamon;
+        name = rvCommunicationDeamon.getName();
         gridPane = layut;
 
         if (rvDeamon != null)
@@ -61,10 +66,10 @@ public class RvDeamon extends TitledPane {
         GridPane.setConstraints(service, 1, 3);
         GridPane.setColumnSpan(service, 2);
 
-        final ProgressBar connected = new ProgressBar(0);
-        connected.setPrefWidth(130);
-        GridPane.setConstraints(connected, 1, 8);
-        GridPane.setColumnSpan(connected, 3);
+//        final ProgressBar connected = new ProgressBar(0);
+//        connected.setPrefWidth(130);
+//        GridPane.setConstraints(connected, 1, 8);
+//        GridPane.setColumnSpan(connected, 3);
 
         Separator separator = new Separator(Orientation.HORIZONTAL);
         GridPane.setConstraints(separator, 1, 9);
@@ -73,25 +78,27 @@ public class RvDeamon extends TitledPane {
         GridPane.setConstraints(separator1, 1, 10);
         GridPane.setColumnSpan(separator1, 3);
 
-        final ToggleButton startStop = new ToggleButton("Start");
-        ToggleGroup tgDeadmon = new ToggleGroup();
-        startStop.setToggleGroup(tgDeadmon);
-        tgDeadmon.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            public void changed(ObservableValue<? extends Toggle> ov,
-                                Toggle toggle, Toggle new_toggle) {
-                if (new_toggle == null) {
-                    startStop.setText("Start");
-                    connected.setProgress(0);
-                } else {
-                    startStop.setText("Stop");
-                    connected.setProgress(-1);
-                }
-            }
-        });
-        GridPane.setConstraints(startStop, 1, 5);
+//        final ToggleButton startStop = new ToggleButton("Start");
+//        ToggleGroup tgDeadmon = new ToggleGroup();
+//        startStop.setToggleGroup(tgDeadmon);
+//        tgDeadmon.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+//            public void changed(ObservableValue<? extends Toggle> ov,
+//                                Toggle toggle, Toggle new_toggle) {
+//                if (new_toggle == null) {
+//                    startStop.setText("Start");
+//                    connected.setProgress(0);
+//                } else {
+//                    startStop.setText("Stop");
+//                    connected.setProgress(-1);
+//                }
+//            }
+//        });
+//        GridPane.setConstraints(startStop, 1, 5);
 
         Button sendMsg = new Button("Send msg");
-        GridPane.setConstraints(sendMsg, 2, 5);
+        GridPane.setConstraints(sendMsg, 1, 5);
+        final ComboBox<String> msgSend = new ComboBox<>();
+        GridPane.setConstraints(msgSend, 2, 5, 2, 1);
 
         Button delete = new Button("X");
         GridPane.setConstraints(delete, 3, 1);
@@ -99,6 +106,7 @@ public class RvDeamon extends TitledPane {
         delete.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                rvCommunicationDeamon.close();
                 accordion.getExpandedPane().setVisible(false);
                 accordion.getPanes().remove(accordion.getExpandedPane());
             }
@@ -109,10 +117,11 @@ public class RvDeamon extends TitledPane {
         GridPane.setConstraints(listenerLabel, 1, 11);
 
         final ProgressBar connectedListener = new ProgressBar(0);
-        connectedListener.setPrefWidth(130);
+        connectedListener.setPrefWidth(200);
         GridPane.setConstraints(connectedListener, 1, 14);
         GridPane.setColumnSpan(connectedListener, 3);
 
+        final Thread rvListenerInstance = new Thread(rvCommunicationDeamon);
         final ToggleButton startStopListener = new ToggleButton("Start");
         ToggleGroup tgListener = new ToggleGroup();
         startStopListener.setToggleGroup(tgListener);
@@ -122,9 +131,14 @@ public class RvDeamon extends TitledPane {
                 if (new_toggle == null) {
                     startStopListener.setText("Start");
                     connectedListener.setProgress(0);
+                    rvCommunicationDeamon.stopListening();
                 } else {
                     startStopListener.setText("Stop");
                     connectedListener.setProgress(-1);
+                    if (!rvListenerInstance.isAlive()) {
+                        rvListenerInstance.start();
+                        System.out.println("started");
+                    }
                 }
             }
         });
@@ -132,6 +146,7 @@ public class RvDeamon extends TitledPane {
 
         Button sendRply = new Button("Sending reply?");
         GridPane.setConstraints(sendRply, 2, 12);
+
 
         final CheckBox isMocking = new CheckBox("is Mocking");
         isMocking.setDisable(true);
@@ -173,8 +188,8 @@ public class RvDeamon extends TitledPane {
             }
         });
 
-        gridPane.getChildren().addAll(deamon, network, service, startStop, sendMsg, delete, separator, separator1,
-                connected, listenerLabel, startStopListener, sendRply, connectedListener, isMocking);
+        gridPane.getChildren().addAll(deamon, network, service, sendMsg, msgSend, delete, separator, separator1,
+                listenerLabel, startStopListener, sendRply, connectedListener, isMocking);
     }
 
 
