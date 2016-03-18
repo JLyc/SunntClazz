@@ -43,11 +43,11 @@ public class RvDeamon extends TitledPane {
         name = rvCommunicationDeamon.getName();
         gridPane = layut;
 
-        if (rvDeamon != null)
+        if (rvDeamon.length() > 0)
             this.rvDeamon = rvDeamon;
-        if (rvNetwork != null)
+        if (rvNetwork.length() > 0)
             this.rvNetwork = rvNetwork;
-        if (rvService != null)
+        if (rvService.length() > 0)
             this.rvService = rvService;
 
         init();
@@ -66,11 +66,6 @@ public class RvDeamon extends TitledPane {
         GridPane.setConstraints(service, 1, 3);
         GridPane.setColumnSpan(service, 2);
 
-//        final ProgressBar connected = new ProgressBar(0);
-//        connected.setPrefWidth(130);
-//        GridPane.setConstraints(connected, 1, 8);
-//        GridPane.setColumnSpan(connected, 3);
-
         Separator separator = new Separator(Orientation.HORIZONTAL);
         GridPane.setConstraints(separator, 1, 9);
         GridPane.setColumnSpan(separator, 3);
@@ -78,27 +73,20 @@ public class RvDeamon extends TitledPane {
         GridPane.setConstraints(separator1, 1, 10);
         GridPane.setColumnSpan(separator1, 3);
 
-//        final ToggleButton startStop = new ToggleButton("Start");
-//        ToggleGroup tgDeadmon = new ToggleGroup();
-//        startStop.setToggleGroup(tgDeadmon);
-//        tgDeadmon.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-//            public void changed(ObservableValue<? extends Toggle> ov,
-//                                Toggle toggle, Toggle new_toggle) {
-//                if (new_toggle == null) {
-//                    startStop.setText("Start");
-//                    connected.setProgress(0);
-//                } else {
-//                    startStop.setText("Stop");
-//                    connected.setProgress(-1);
-//                }
-//            }
-//        });
-//        GridPane.setConstraints(startStop, 1, 5);
-
-        Button sendMsg = new Button("Send msg");
-        GridPane.setConstraints(sendMsg, 1, 5);
-        final ComboBox<String> msgSend = new ComboBox<>();
+        final ComboBox<String> msgSend = new ComboBox<>(MainFX.getSend());
         GridPane.setConstraints(msgSend, 2, 5, 2, 1);
+        Button sendMsg = new Button("Send msg");
+        sendMsg.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (msgSend.getValue().equals("current")) {
+                    rvCommunicationDeamon.sendMsgNew(MainFX.getMsgTextSend().getText());
+                } else {
+                    rvCommunicationDeamon.sendMsgNew(MainFX.getSendSaved().get(msgSend.getValue()));
+                }
+            }
+        });
+        GridPane.setConstraints(sendMsg, 1, 5);
 
         Button delete = new Button("X");
         GridPane.setConstraints(delete, 3, 1);
@@ -155,7 +143,8 @@ public class RvDeamon extends TitledPane {
         final Label replyMsg = new Label("Msg");
         GridPane.setConstraints(replyMsg, 1, 15);
 
-        final ComboBox<String> msg = new ComboBox<>();
+        final ComboBox<String> msg = new ComboBox<>(MainFX.getSend());
+
         GridPane.setConstraints(msg, 2, 15, 2, 1);
 
         final TextArea msgReply = new TextArea();

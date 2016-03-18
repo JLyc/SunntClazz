@@ -3,6 +3,7 @@ package rv_wrappers;
 import com.logica.eai.test.bw.BWConstants;
 import com.logica.eai.test.bw.IntegrationRuntimeException;
 import com.tibco.tibrv.*;
+import gui.MainFX;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -44,7 +45,7 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
     private boolean isListening = true;
 
     public void open() {
-        LOG.info("\nInitializing RV connection...");
+        MainFX.log("\nInitializing RV connection...");
         try {
             Tibrv.open(Tibrv.IMPL_NATIVE);
             rvdTransport = new TibrvRvdTransport(rvService,
@@ -54,9 +55,9 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
             }
             rvQueue = new TibrvQueue();
             tibrvListener = new TibrvListener(rvQueue, this, rvdTransport, rvQueueName, null);
-            LOG.info("\nRV Listening on subject: " + rvQueueName);
+            MainFX.log("\nRV Communicating on subject: " + rvQueueName);
         } catch (TibrvException e) {
-            LOG.info("\nRV failed to initialize: "+ e);
+            MainFX.log("\nRV failed to initialize: " + e);
         }
     }
 
@@ -71,7 +72,7 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
             rvdTransport.destroy();
             Tibrv.close();
         } catch (TibrvException e) {
-            LOG.info("\nCould not close connection! "+ e.getMessage());
+            MainFX.log("\nCould not close connection! " + e.getMessage());
         }finally {
             stopListening();
         }
@@ -91,7 +92,7 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
                 rvdTransport.send(new RVMessageInterfaceWraper(xmlMsg));
 
         } catch (TibrvException e) {
-            LOG.info("sendMsg error "+ e.getMessage());
+            MainFX.log("sendMsg error " + e.getMessage());
         }
     }
 
@@ -126,13 +127,13 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
             }
                 rvdTransport.sendReply(responseMsg.getMessage(), sourceMsg.getMessage());
         } catch (TibrvException e) {
-            LOG.info("Failed to send response" + responseMsg.getText()+ e.getMessage());
+            MainFX.log("Failed to send response" + responseMsg.getText() + e.getMessage());
         }
     }
 
     public void run() {
         isListening=true;
-        LOG.info("\nRV listener started");
+        MainFX.log("\nRV listener started");
         while(isListening){
             try {
                 if(rvQueue==null){
@@ -143,10 +144,10 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
 //                            timed dispatch should make time to listen ?
 //                            rvQueue.timedDispatch();
             } catch (TibrvException | InterruptedException e) {
-                LOG.info("\nException at rv listening thread fail to dispatch "+e);
+                MainFX.log("\nException at rv listening thread fail to dispatch " + e);
             }
         }
-        LOG.info("\nRV listener stopped");
+        MainFX.log("\nRV listener stopped");
     }
 
     @Override
