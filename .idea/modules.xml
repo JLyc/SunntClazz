@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AntTest/AntTest.iml" filepath="$PROJECT_DIR$/AntTest/AntTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/Collection/Collection.iml" filepath="$PROJECT_DIR$/Collection/Collection.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ConfigParser/ConfigParser.iml" filepath="$PROJECT_DIR$/ConfigParser/ConfigParser.iml" />
       <module fileurl="file://$PROJECT_DIR$/RvSender/RvSender.iml" filepath="$PROJECT_DIR$/RvSender/RvSender.iml" />
       <module fileurl="file://$PROJECT_DIR$/SunntClazz.iml" filepath="$PROJECT_DIR$/SunntClazz.iml" />
       <module fileurl="file://$PROJECT_DIR$/TextToSpeach_0.2/TextToSpeach_0.2.iml" filepath="$PROJECT_DIR$/TextToSpeach_0.2/TextToSpeach_0.2.iml" />

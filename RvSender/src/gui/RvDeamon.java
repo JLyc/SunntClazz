@@ -73,16 +73,16 @@ public class RvDeamon extends TitledPane {
         GridPane.setConstraints(separator1, 1, 10);
         GridPane.setColumnSpan(separator1, 3);
 
-        final ComboBox<String> msgSend = new ComboBox<>(MainFX.getSend());
+        final ComboBox<String> msgSend = new ComboBox<>(MessagePanel.getMessagePanel().getSend());
         GridPane.setConstraints(msgSend, 2, 5, 2, 1);
         Button sendMsg = new Button("Send msg");
         sendMsg.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if (msgSend.getValue().equals("current")) {
-                    rvCommunicationDeamon.sendMsgNew(MainFX.getMsgTextSend().getText());
+                    rvCommunicationDeamon.sendMsgNew(MessagePanel.getMessagePanel().getSendTxt().getText());
                 } else {
-                    rvCommunicationDeamon.sendMsgNew(MainFX.getSendSaved().get(msgSend.getValue()));
+                    rvCommunicationDeamon.sendMsgNew(MessagePanel.getMessagePanel().getSavedTxt(msgSend.getValue()));
                 }
             }
         });
@@ -143,7 +143,7 @@ public class RvDeamon extends TitledPane {
         final Label replyMsg = new Label("Msg");
         GridPane.setConstraints(replyMsg, 1, 15);
 
-        final ComboBox<String> msg = new ComboBox<>(MainFX.getSend());
+        final ComboBox<String> msg = new ComboBox<>(MessagePanel.getMessagePanel().getSend());
 
         GridPane.setConstraints(msg, 2, 15, 2, 1);
 
@@ -161,7 +161,6 @@ public class RvDeamon extends TitledPane {
             }
         });
         GridPane.setConstraints(msgReply, 1, 16, 2, 4);
-//        msgReply.setVisible(false);
         sendRply.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -185,11 +184,6 @@ public class RvDeamon extends TitledPane {
 
     public void addToAccordion(Accordion accordion) {
         this.accordion = accordion;
-        for (TitledPane tilePane : accordion.getPanes()) {
-            if (!tilePane.isVisible()) {
-
-            }
-        }
         accordion.getPanes().add(this);
         accordion.setExpandedPane(this);
     }

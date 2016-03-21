@@ -39,8 +39,6 @@ import java.util.Map;
  * Created by JLyc on 3/6/2016.
  */
 public class MainFX extends Application {
-
-
     private TextField rvDeamonName;
     private TextField rvDeamon;
     private TextField rvNetwork;
@@ -49,18 +47,7 @@ public class MainFX extends Application {
 
     private Accordion accordion = new Accordion();
 
-    private static TextArea msgTextSend;
-
-    public static TextArea getMsgTextSend() {
-        return msgTextSend;
-    }
-
-    public static void log(String log) {
-        logfield.appendText("\n" + log);
-    }
-
-    private static TextArea logfield;
-
+    private static int panelsOffset=0;
 
     private void init(Stage primaryStage) {
         Group root = new Group();
@@ -72,118 +59,15 @@ public class MainFX extends Application {
         gridPane.setVgap(10);
         deamonProperties(gridPane);
         deamonInstances(gridPane);
-        messagePanel(gridPane);
+        MessagePanel.getMessagePanel().init(gridPane, panelsOffset);
 
         root.getChildren().add(gridPane);
     }
 
-    private static final ObservableList send = FXCollections.observableArrayList("current");
-    private static Map<String, String> sendSaved = new HashMap<>();
-    private static final ObservableList received = FXCollections.observableArrayList("current");
-    private static Map<String, String> receivedSaved = new HashMap<>();
-
-    public static ObservableList getSend() {
-        return send;
-    }
-
-    public static Map<String, String> getSendSaved() {
-        return sendSaved;
-    }
-
-    private void messagePanel(GridPane gridPane) {
-        final TabPane tabPane = new TabPane();
-        msgTextSend = new TextArea();
-        msgTextSend.setPromptText("\t Enter your randevousz msg here");
-        msgTextSend.setPrefSize(244, 180);
-        msgTextSend.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                    if (mouseEvent.getClickCount() == 2) {
-                        messageEditor(msgTextSend);
-                    }
-                }
-            }
-        });
-
-        final TextArea msgTextReceived = new TextArea();
-        msgTextReceived.setPromptText("\t Enter your randevousz msg here");
-        msgTextReceived.setPrefSize(244, 180);
-        msgTextReceived.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                    if (mouseEvent.getClickCount() == 2) {
-                        messageEditor(msgTextReceived);
-                    }
-                }
-            }
-        });
-        logfield = new TextArea("Beginning of log:");
-        logfield.setPrefSize(244, 180);
-
-        final ComboBox<String> savedMsgs = new ComboBox<>();
-        savedMsgs.setPromptText("Enter name or chose msg...");
-        savedMsgs.setEditable(true);
-        savedMsgs.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue ov, String t, String t1) {
-                if (tabPane.getTabs().get(0).isSelected()) {
-                    msgTextSend.setText(sendSaved.get(t1));
-                } else {
-                    msgTextReceived.setText(receivedSaved.get(t1));
-                }
-            }
-        });
-
-        GridPane.setConstraints(savedMsgs, 2, 8);
-        final Tab msgSendTab = new Tab("Sent Msg", msgTextSend);
-        msgSendTab.setClosable(false);
-        msgSendTab.setOnSelectionChanged(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                if (((Tab) event.getSource()).isSelected()) {
-                    savedMsgs.setItems(send);
-                }
-            }
-        });
-        Tab msgReceivedTab = new Tab("Received Msg", msgTextReceived);
-        msgReceivedTab.setClosable(false);
-        msgReceivedTab.setOnSelectionChanged(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                if (((Tab) event.getSource()).isSelected()) {
-                    savedMsgs.setItems(received);
-                }
-            }
-        });
-        Tab logTab = new Tab("Loging", logfield);
-        logTab.setClosable(false);
-        tabPane.getTabs().addAll(msgSendTab, msgReceivedTab, logTab);
-        GridPane.setConstraints(tabPane, 1, 7, 2, 1);
-
-        Button saveMsg = new Button("Save msg");
-        saveMsg.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if (tabPane.getTabs().get(0).isSelected()) {
-                    String _name = savedMsgs.getEditor().getText();
-                    send.add(_name);
-                    sendSaved.put(_name, msgTextSend.getText());
-                } else {
-                    String _name = savedMsgs.getEditor().getText();
-                    received.add(_name);
-                    sendSaved.put(_name, msgTextReceived.getText());
-                }
-            }
-        });
-        GridPane.setConstraints(saveMsg, 1, 8);
-        gridPane.getChildren().addAll(tabPane, saveMsg, savedMsgs);
-    }
-
     private void deamonInstances(GridPane gridPane) {
+        int _panelsOffset = panelsOffset;
         Button testConnection = new Button("Test Connection");
-        GridPane.setConstraints(testConnection, 2, 6);
+        GridPane.setConstraints(testConnection, 2, _panelsOffset++);
         testConnection.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -192,9 +76,9 @@ public class MainFX extends Application {
                 rvCommunicationDeamon.close();
             }
         });
-
+        _panelsOffset = panelsOffset;
         Button addDeamon = new Button("Add Deamon");
-        GridPane.setConstraints(addDeamon, 1, 6);
+        GridPane.setConstraints(addDeamon, 1, _panelsOffset++);
         addDeamon.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -205,33 +89,36 @@ public class MainFX extends Application {
                 titledPane.addToAccordion(accordion);
             }
         });
-        GridPane.setConstraints(accordion, 3, 1,4, 10);
+        GridPane.setConstraints(accordion, 3, 0,4, 10);
         gridPane.getChildren().addAll(accordion, addDeamon, testConnection);
     }
 
     private void deamonProperties(GridPane gridPane) {
+        int _panelsOffset = panelsOffset;
         Label rvDeamonNameLabel = new Label("RvName");
-        GridPane.setConstraints(rvDeamonNameLabel, 1, 1);
+        GridPane.setConstraints(rvDeamonNameLabel, 1, _panelsOffset++);
         Label rvDeamonLabel = new Label("RvDeamon");
-        GridPane.setConstraints(rvDeamonLabel, 1, 2);
+        GridPane.setConstraints(rvDeamonLabel, 1, _panelsOffset++);
         Label rvNetworkLabel = new Label("RvNetwork");
-        GridPane.setConstraints(rvNetworkLabel, 1, 3);
+        GridPane.setConstraints(rvNetworkLabel, 1, _panelsOffset++);
         Label rvServiceLabel = new Label("RvService");
-        GridPane.setConstraints(rvServiceLabel, 1, 4);
+        GridPane.setConstraints(rvServiceLabel, 1, _panelsOffset++);
         Label rvSubjectLabel = new Label("RvSubject");
-        GridPane.setConstraints(rvSubjectLabel, 1, 5);
+        GridPane.setConstraints(rvSubjectLabel, 1, _panelsOffset++);
 
-
+        _panelsOffset = panelsOffset;
         rvDeamonName = new TextField("artemis");
-        GridPane.setConstraints(rvDeamonName, 2, 1);
+        GridPane.setConstraints(rvDeamonName, 2, _panelsOffset++);
         rvDeamon = new TextField("tcp:7541");
-        GridPane.setConstraints(rvDeamon, 2, 2);
+        GridPane.setConstraints(rvDeamon, 2, _panelsOffset++);
         rvNetwork = new TextField("");
-        GridPane.setConstraints(rvNetwork, 2, 3);
+        GridPane.setConstraints(rvNetwork, 2, _panelsOffset++);
         rvService = new TextField("7541");
-        GridPane.setConstraints(rvService, 2, 4);
+        GridPane.setConstraints(rvService, 2, _panelsOffset++);
         rvSubject = new TextField("RvSubject");
-        GridPane.setConstraints(rvSubject, 2, 5);
+        GridPane.setConstraints(rvSubject, 2, _panelsOffset++);
+
+        panelsOffset = _panelsOffset;
 
         gridPane.getChildren().addAll(
                 rvDeamonNameLabel,
@@ -253,7 +140,6 @@ public class MainFX extends Application {
         helpArea.setLineWrap(true);
         helpArea.setWrapStyleWord(true);
         scrollPane.setPreferredSize(new Dimension(500, 500));
-        System.out.println("loading");
         JOptionPane.showMessageDialog(null, scrollPane, "RV message",
                 JOptionPane.PLAIN_MESSAGE);
         msgReply.setText(helpArea.getText());

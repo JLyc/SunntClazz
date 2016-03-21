@@ -4,6 +4,7 @@ import com.logica.eai.test.bw.BWConstants;
 import com.logica.eai.test.bw.IntegrationRuntimeException;
 import com.tibco.tibrv.*;
 import gui.MainFX;
+import gui.MessagePanel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -15,7 +16,6 @@ import java.io.UnsupportedEncodingException;
  * Created by JLyc on 9. 4. 2015.
  */
 public class RvCommunication implements TibrvMsgCallback, Runnable {
-    private static final Log LOG = LogFactory.getLog(RvCommunication.class);
 
     // RV fields
     private TibrvRvdTransport rvdTransport = null;
@@ -45,19 +45,19 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
     private boolean isListening = true;
 
     public void open() {
-        MainFX.log("\nInitializing RV connection...");
+        MessagePanel.logTxt("Initializing RV connection...");
         try {
             Tibrv.open(Tibrv.IMPL_NATIVE);
             rvdTransport = new TibrvRvdTransport(rvService,
                    rvNetwork, rvDeamon);
             if (rvdTransport == null) {
-                LOG.info("RV transport is not initialized!");
+                MessagePanel.logTxt("RV transport is not initialized!");
             }
             rvQueue = new TibrvQueue();
             tibrvListener = new TibrvListener(rvQueue, this, rvdTransport, rvQueueName, null);
-            MainFX.log("\nRV Communicating on subject: " + rvQueueName);
+            MessagePanel.logTxt("RV Communicating on subject: " + rvQueueName);
         } catch (TibrvException e) {
-            MainFX.log("\nRV failed to initialize: " + e);
+            MessagePanel.logTxt("RV failed to initialize: " + e);
         }
     }
 
@@ -65,14 +65,14 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
         try {
             if(tibrvListener==null ||rvdTransport == null)
             {
-                LOG.info("\nCould not close connection! No connection crated ");
+                MessagePanel.logTxt("Could not close connection! No connection crated ");
                 return;
             }
             tibrvListener.destroy();
             rvdTransport.destroy();
             Tibrv.close();
         } catch (TibrvException e) {
-            MainFX.log("\nCould not close connection! " + e.getMessage());
+            MessagePanel.logTxt("Could not close connection! " + e.getMessage());
         }finally {
             stopListening();
         }
@@ -80,20 +80,6 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
 
     public void stopListening() {
         isListening=false;
-    }
-
-    public void sendMsg(String xmlMsg){
-        try {
-            if(rvdTransport==null) {
-                LOG.info("No Rvd Transport crated\nMsg not send");
-                isListening=false;
-                return;
-            }
-                rvdTransport.send(new RVMessageInterfaceWraper(xmlMsg));
-
-        } catch (TibrvException e) {
-            MainFX.log("sendMsg error " + e.getMessage());
-        }
     }
 
     public void sendMsgNew(String xmlMsg){
@@ -122,38 +108,37 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
     public void sendReply(RVMessageInterfaceWraper responseMsg, RVMessageInterfaceWraper sourceMsg) {
         try {
             if(rvdTransport==null) {
-                LOG.info("No Rvd Transport crated\nMsg not send");
+                MessagePanel.logTxt("No Rvd Transport crated\nMsg not send");
                 return;
             }
                 rvdTransport.sendReply(responseMsg.getMessage(), sourceMsg.getMessage());
         } catch (TibrvException e) {
-            MainFX.log("Failed to send response" + responseMsg.getText() + e.getMessage());
+            MessagePanel.logTxt("Failed to send response" + responseMsg.getText() + e.getMessage());
         }
     }
 
     public void run() {
         isListening=true;
-        MainFX.log("\nRV listener started");
+        MessagePanel.logTxt("RV listener started");
         while(isListening){
             try {
                 if(rvQueue==null){
-                    LOG.info("\nRV listener stopped. Listening queue not created");
+                    MessagePanel.logTxt("RV listener stopped. Listening queue not created");
                     return;
                 }
                 rvQueue.dispatch();
 //                            timed dispatch should make time to listen ?
 //                            rvQueue.timedDispatch();
             } catch (TibrvException | InterruptedException e) {
-                MainFX.log("\nException at rv listening thread fail to dispatch " + e);
+                MessagePanel.logTxt("Exception at rv listening thread fail to dispatch " + e);
             }
         }
-        MainFX.log("\nRV listener stopped");
+        MessagePanel.logTxt("RV listener stopped");
     }
 
     @Override
     public void onMsg(TibrvListener tibrvListener, TibrvMsg tibrvMsg) {
-//        MainFrame.getRvMsg().setText(tibrvMsg.toString());
-//        MainFrame.newMsg(new RVMessageInterfaceWraper(tibrvMsg));
+        MessagePanel.getMessagePanel().getReceivedTxt().setText(tibrvMsg.toString());
     }
 
     public String getName() {
