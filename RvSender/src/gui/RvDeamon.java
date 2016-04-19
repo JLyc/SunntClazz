@@ -74,6 +74,7 @@ public class RvDeamon extends TitledPane {
         GridPane.setColumnSpan(separator1, 3);
 
         final ComboBox<String> msgSend = new ComboBox<>(MessagePanel.getMessagePanel().getSend());
+        msgSend.setValue("current");
         GridPane.setConstraints(msgSend, 2, 5, 2, 1);
         Button sendMsg = new Button("Send msg");
         sendMsg.setOnAction(new EventHandler<ActionEvent>() {

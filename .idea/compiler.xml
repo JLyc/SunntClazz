@@ -23,7 +23,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="TextToSpeach_0.2" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

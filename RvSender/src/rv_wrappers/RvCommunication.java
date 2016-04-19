@@ -93,6 +93,7 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
                         )
                 );
                 message.setSendSubject(rvQueueName);
+                message.setReplySubject(rvQueueName);
                 rvdTransport.send(message);
 
             }
@@ -138,7 +139,11 @@ public class RvCommunication implements TibrvMsgCallback, Runnable {
 
     @Override
     public void onMsg(TibrvListener tibrvListener, TibrvMsg tibrvMsg) {
-        MessagePanel.getMessagePanel().getReceivedTxt().setText(tibrvMsg.toString());
+        System.out.println(tibrvMsg.getReplySubject());
+        System.out.println(tibrvMsg.getSendSubject());
+        RVMessageInterfaceWraper msg = new RVMessageInterfaceWraper(tibrvMsg);
+        MessagePanel.logTxt(msg.getText());
+        MessagePanel.getMessagePanel().getReceivedTxt().setText(msg.getText());
     }
 
     public String getName() {
