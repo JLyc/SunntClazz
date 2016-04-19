@@ -27,11 +27,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import rv_wrappers.RvCommunication;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +53,7 @@ public class MainFX extends Application {
     private static int panelsOffset=0;
 
     private void init(Stage primaryStage) {
+        setNativeLib(primaryStage);
         Group root = new Group();
         primaryStage.setScene(new Scene(root));
 
@@ -71,7 +75,7 @@ public class MainFX extends Application {
         testConnection.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                RvCommunication rvCommunicationDeamon = new RvCommunication(rvDeamonName.getText(),rvDeamon.getText(),rvNetwork.getText(),rvService.getText(),rvSubject.getText());
+                RvCommunication rvCommunicationDeamon = new RvCommunication(rvDeamonName.getText(), rvDeamon.getText(), rvNetwork.getText(), rvService.getText(), rvSubject.getText());
                 rvCommunicationDeamon.open();
                 rvCommunicationDeamon.close();
             }
@@ -82,14 +86,14 @@ public class MainFX extends Application {
         addDeamon.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                RvCommunication rvCommunicationDeamon = new RvCommunication(rvDeamonName.getText(),rvDeamon.getText(),rvNetwork.getText(),rvService.getText(),rvSubject.getText());
+                RvCommunication rvCommunicationDeamon = new RvCommunication(rvDeamonName.getText(), rvDeamon.getText(), rvNetwork.getText(), rvService.getText(), rvSubject.getText());
                 rvCommunicationDeamon.open();
                 GridPane layut = new GridPane();
-                RvDeamon titledPane = new RvDeamon(rvCommunicationDeamon , layut, rvDeamon.getText(), rvNetwork.getText(), rvService.getText());
+                RvDeamon titledPane = new RvDeamon(rvCommunicationDeamon, layut, rvDeamon.getText(), rvNetwork.getText(), rvService.getText());
                 titledPane.addToAccordion(accordion);
             }
         });
-        GridPane.setConstraints(accordion, 3, 0,4, 10);
+        GridPane.setConstraints(accordion, 3, 0, 4, 10);
         gridPane.getChildren().addAll(accordion, addDeamon, testConnection);
     }
 
@@ -115,7 +119,7 @@ public class MainFX extends Application {
         GridPane.setConstraints(rvNetwork, 2, _panelsOffset++);
         rvService = new TextField("7541");
         GridPane.setConstraints(rvService, 2, _panelsOffset++);
-        rvSubject = new TextField("RvSubject");
+        rvSubject = new TextField("TMSK.DEV.CRM.CMN.U2000.ADAPTER.SUBSCRIBER");
         GridPane.setConstraints(rvSubject, 2, _panelsOffset++);
 
         panelsOffset = _panelsOffset;
@@ -143,6 +147,25 @@ public class MainFX extends Application {
         JOptionPane.showMessageDialog(null, scrollPane, "RV message",
                 JOptionPane.PLAIN_MESSAGE);
         msgReply.setText(helpArea.getText());
+    }
+
+
+
+    private static void setNativeLib(Stage primaryStage) {
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File selectedDirectory =
+                directoryChooser.showDialog(primaryStage);
+        System.out.println(selectedDirectory.getAbsoluteFile());
+        System.setProperty("java.library.path", ";"+selectedDirectory.getAbsoluteFile());
+
+        try {
+            Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
+            fieldSysPath.setAccessible(true);
+            fieldSysPath.set(null, null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.getStackTrace();
+        }
     }
 
     @Override
