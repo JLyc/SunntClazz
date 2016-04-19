@@ -1,6 +1,5 @@
-import com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl;
-import com.tibco.security.AXSecurityException;
-import com.tibco.security.ObfuscationEngine;
+package config_parser;
+
 import org.dom4j.Document;
 
 import java.io.*;
@@ -14,6 +13,7 @@ import org.dom4j.io.SAXReader;
  */
 public class ConfigParser {
     TreeMap<String, String> globalWars = new TreeMap<>();
+    TreeMap<String, TreeMap<String, String>> parWars = new TreeMap<>();
 
     public static void main(String[] args) {
         ConfigParser cfgPharser = new ConfigParser();
@@ -26,17 +26,23 @@ public class ConfigParser {
         try {
             Document document = reader.read(ios);
 
-            Element root = document.getRootElement();
-
-//            GlobalVariables gv = new GlobalVariables(document);
-//            globalWars = gv.getGlobalWars();
-
-            ParVariables pv = new ParVariables(document);
-            globalWars = pv.getParslWars();
+            GlobalVariables gv = new GlobalVariables(document);
+            globalWars = gv.getGlobalWars();
 
             for (Map.Entry entry : globalWars.entrySet()) {
                 System.out.println(entry.getKey() + " => " + entry.getValue());
             }
+
+            ParVariables pv = new ParVariables(document);
+            parWars = pv.getParsWars();
+            for (Map.Entry<String, TreeMap<String, String>> pars: parWars.entrySet()){
+                System.out.println("****************************"+pars.getKey()+"****************************");
+                for (Map.Entry<String, String> vars : pars.getValue().entrySet()) {
+                    System.out.println(vars.getKey() +" -> "+vars.getValue());
+                }
+            }
+
+
         } catch (DocumentException e) {
             e.printStackTrace();
 
