@@ -33,23 +33,10 @@ public class CreateXLSX {
 
     public static void main(String[] args) throws IOException {
         XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet spreadsheet = workbook.createSheet("Fontstyle");
-        XSSFRow row = spreadsheet.createRow(2);
-        //Create a new font and alter it.
-        XSSFFont font = workbook.createFont();
-        font.setFontHeightInPoints((short) 30);
-        font.setFontName("IMPACT");
-        font.setItalic(true);
-        font.setColor(HSSFColor.BRIGHT_GREEN.index);
-        //Set font into style
-        XSSFCellStyle style = workbook.createCellStyle();
-        style.setFont(font);
-        // Create a cell with a value and set style to it.
         new AddSummary(workbook);
         new AddDeploymentArtefacts(workbook);
-        XSSFCell cell = row.createCell(1);
-        cell.setCellValue("Font Style");
-        cell.setCellStyle(style);
+        new AddConfigVariables(workbook,"SAI");
+
         FileOutputStream out = new FileOutputStream(
                 new File("fontstyle.xlsx"));
         workbook.write(out);

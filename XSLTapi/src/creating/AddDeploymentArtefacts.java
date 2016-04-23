@@ -7,45 +7,66 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by sochaa on 21. 4. 2016.
  */
 public class AddDeploymentArtefacts {
 
+    private static int rowCount = 0;
+    private XSSFCellStyle hintStyle;
+
+    private Set<String> earsSet = new HashSet<>();
+    private Set<String> sqlSet= new HashSet<>();;
+    private Set<String> certificatesSet= new HashSet<>();;
+    private Set<String> bcSet= new HashSet<>();;
+    private Set<String> emsSet= new HashSet<>();;
+    private Set<String> otherSet= new HashSet<>();;
+
+
     public AddDeploymentArtefacts(XSSFWorkbook releaseNotes) {
         XSSFSheet deploymentArtifacts = releaseNotes.createSheet("Deployment artifacts");
-        XSSFRow row = deploymentArtifacts.createRow(2);
-        //Create a new font and alter it.
+        hintStyle = getHintStyle(releaseNotes);
+
+        XSSFRow header = deploymentArtifacts.createRow(rowCount);
+        header.createCell(0).setCellValue("List of artefacts to be provided for cutover");
+
+        addArtifactsTables(deploymentArtifacts,"EARs", "List of TIBCO BW EARs. See sheets EAR* for configuration values",earsSet);
+        addArtifactsTables(deploymentArtifacts,"SQL", "List of SQL scripts. See DB Deployment sheet for more info ",sqlSet);
+        addArtifactsTables(deploymentArtifacts,"Certificates", "List of SSL certificates. See Infrastructure sheet for configuration values",certificatesSet);
+        addArtifactsTables(deploymentArtifacts,"BC", "List of Business Connect artefacts ",bcSet);
+        addArtifactsTables(deploymentArtifacts,"Ems", "List of EMS scripts. See EMS sheet for more info ",emsSet);
+        addArtifactsTables(deploymentArtifacts,"Other", "Like list of xml configuration files that are not part of EAR ",otherSet);
+
+        deploymentArtifacts.autoSizeColumn(0);
+
+    }
+
+    private void addArtifactsTables(XSSFSheet deploymentArtifacts, String name, String hint, Set<String > list) {
+        XSSFRow row = deploymentArtifacts.createRow(rowCount+=2);
+        row.createCell(0).setCellValue(name);
+        crateHintCell(row, 1, hint);
+
+        for (String earName: list){
+            XSSFRow rows = deploymentArtifacts.createRow(rowCount++);
+            rows.createCell(0).setCellValue(earName);
+        }
+    }
+
+    private void crateHintCell(XSSFRow ears, int position, String text) {
+        XSSFCell cell = ears.createCell(position);
+        cell.setCellValue(text);
+        cell.setCellStyle(hintStyle);
+    }
+
+    private XSSFCellStyle getHintStyle(XSSFWorkbook releaseNotes) {
         XSSFFont font = releaseNotes.createFont();
-//        font.setFontHeightInPoints((short) 30);
-//        font.setFontName("IMPACT");
         font.setItalic(true);
         font.setColor(HSSFColor.GREY_40_PERCENT.index);
-        //Set font into style
         XSSFCellStyle style = releaseNotes.createCellStyle();
         style.setFont(font);
-
-        XSSFRow header = deploymentArtifacts.createRow(0);
-        header.createCell(0).setCellValue("List of artefacts to be provided for cutover");
-        XSSFRow ears = deploymentArtifacts.createRow(1);
-        ears.createCell(0).setCellValue("EARs");
-        XSSFCell cell = ears.createCell(1);
-        cell.setCellValue("List of TIBCO BW EARs. See sheets EAR* for configuration values");
-        cell.setCellStyle(style);
-//        ears.createCell(1).setCellValue();
-//        ears.createCell(1).setCellStyle(hintStyle);
-//        ears.createCell(1).setCellStyle(CreateXLSX.style);
-
-        // Create a cell with a value and set style to it.
-//        XSSFCell cell = row.createCell(1);
-//        cell.setCellValue("Font Style");
-//        cell.setCellStyle(style);
-//        Row sql = deploymentArtifacts.createRow(2);
-//        Row certificates = deploymentArtifacts.createRow(4);
-//        Row bc = deploymentArtifacts.createRow(4);
-//        Row ems = deploymentArtifacts.createRow(4);
-//        Row other = deploymentArtifacts.createRow(4);
-//        deploymentArtifacts.autoSizeColumn(0);
-
+        return style;
     }
 }

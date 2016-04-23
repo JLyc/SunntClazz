@@ -13,7 +13,11 @@ import org.dom4j.io.SAXReader;
  */
 public class ConfigParser {
     TreeMap<String, String> globalWars = new TreeMap<>();
+
     TreeMap<String, TreeMap<String, String>> parWars = new TreeMap<>();
+    public ConfigParser() {
+        this.parseXMLConfig();
+    }
 
     public static void main(String[] args) {
         ConfigParser cfgPharser = new ConfigParser();
@@ -47,5 +51,13 @@ public class ConfigParser {
             e.printStackTrace();
 
         }
+    }
+
+    public TreeMap<String, String> getGlobalWars() {
+        return globalWars;
+    }
+
+    public TreeMap<String, TreeMap<String, String>> getParWars() {
+        return parWars;
     }
 }
