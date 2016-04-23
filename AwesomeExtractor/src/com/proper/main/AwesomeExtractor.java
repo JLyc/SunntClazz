@@ -6,8 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -15,20 +14,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.SynchronousQueue;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class AwesomeExtractor {
 
 	private static Set<File> extractedFiles = new HashSet<>();
 	private static Set<String> extractedDirs = new HashSet<>();
 
-	static String path = "D:\\SunntClazz\\AwesomeExtractor\\resources";
+	static String path = "C:\\Java\\Projects\\SunntClazz\\AwesomeExtractor\\resources";
 
+	static PathMatcher pattern = FileSystems.getDefault().getPathMatcher("glob:**.{ear,sar}");
 
 	public static void main(String[] args) throws ZipException, IOException {
 		for(int i=0; i< 5; i++) {
@@ -39,17 +38,31 @@ public class AwesomeExtractor {
 				extractedDirs.add(zipFile.getPath().substring(0, length - 4));
 				extractFolder(zipFile.getAbsolutePath());
 			}
-
 			cleanUp();
 		}
-		System.err.println(sum/5);;;;
 	}
 
 	private static List<File> getAllZipFiles(String path) {
+		try {
+			for (Path path1 : Files.walk(Paths.get(path)).filter(new Predicate<Path>() {
+                @Override
+                public boolean test(Path path) {
+					System.out.println(pattern.matches(path));
+					boolean result = path.endsWith(".ear") || path.endsWith(".sar");
+//					System.out.println(result);
+					return result;
+                }
+            }).collect(Collectors.<Path>toList())) {
+                System.out.println(path1);
+            }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		File dir = new File(path);
 		File[] files = dir.listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String filename) {
-				return filename.endsWith(".zip") || filename.endsWith(".ear") || filename.endsWith(".sar");
+				return filename.endsWith(".ear") || filename.endsWith(".sar");
 			}
 		});
 		return Arrays.asList(files);
@@ -61,76 +74,55 @@ public class AwesomeExtractor {
 		ZipFile zip = new ZipFile(new File(zipFile));
 		String newPath = zipFile.substring(0, zipFile.length() - 4);
 
-		new File(newPath).mkdir();
-		Enumeration<?> zipFileEntries = zip.entries();
+		Files.createDirectories(Paths.get(newPath));
 
-		// Process each entry
+		Enumeration<?> zipFileEntries = zip.entries();
 		while (zipFileEntries.hasMoreElements()) {
-			// grab a zip file entry
 			ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
 			String currentEntry = entry.getName();
 			File destFile = new File(newPath, currentEntry);
-			if (destFile.isDirectory()) {
-				System.out.println("DIR======================================");
-			}
 
-			// destFile = new File(newPath, destFile.getName());
 			File destinationParent = destFile.getParentFile();
-
-			// create the parent directory structure if needed
 			destinationParent.mkdirs();
 
 			extractedFiles.add(destFile);
 
 			if (!entry.isDirectory()) {
-				BufferedInputStream is = new BufferedInputStream(zip.getInputStream(entry));
-				int currentByte;
-				// establish buffer for writing file
-				byte data[] = new byte[BUFFER];
-
-				// write the current file to disk
-				FileOutputStream fos = new FileOutputStream(destFile);
-				BufferedOutputStream dest = new BufferedOutputStream(fos, BUFFER);
-
-				// read and write until last byte is encountered
-				while ((currentByte = is.read(data, 0, BUFFER)) != -1) {
-					dest.write(data, 0, currentByte);
-				}
-				dest.flush();
-				dest.close();
-				is.close();
+				writeFile(BUFFER, zip, entry, destFile);
 			}
 
-			if (currentEntry.endsWith(".zip") || currentEntry.endsWith(".par") || currentEntry.endsWith(".sar")) {
-				// found a zip file, try to open
+			if (currentEntry.endsWith(".par") || currentEntry.endsWith(".sar")) {
 				extractFolder(destFile.getAbsolutePath());
 			}
 		}
 		zip.close();
 	}
 
+	private static void writeFile(int BUFFER, ZipFile zip, ZipEntry entry, File destFile) throws IOException {
+		BufferedInputStream is = new BufferedInputStream(zip.getInputStream(entry));
+
+		BufferedOutputStream dest = new BufferedOutputStream(new FileOutputStream(destFile), BUFFER);
+
+		int currentByte;
+		byte data[] = new byte[BUFFER];
+		while ((currentByte = is.read(data, 0, BUFFER)) != -1) {
+            dest.write(data, 0, currentByte);
+        }
+		dest.flush();
+		dest.close();
+		is.close();
+	}
+
 	private static long sum;
 	private static void cleanUp() {
 		Long currentTime = System.currentTimeMillis();
-//		for (String currentFile : extractedDirs) {
-//			delete(new File(currentFile));
-//		}
 		walkTreeDelete(extractedDirs);
 		long time = System.currentTimeMillis()-currentTime;
 		sum += time;
 		System.out.println(time);
 	}
 
-	static void delete(File f) {
-		if (f.isDirectory()) {
-			for (File c : f.listFiles())
-				delete(c);
-		}
-		if (!f.delete())
-			System.out.println("Failed to delete file: " + f);
-	}
-
-	public static void walkTreeDelete(Set<String> paths) {
+	private static void walkTreeDelete(Set<String> paths) {
 		for (String p : paths) {
 			Path path = Paths.get(p);
 			try {

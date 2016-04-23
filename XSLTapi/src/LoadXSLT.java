@@ -32,6 +32,7 @@ public class LoadXSLT {
         XSSFWorkbook workbook = new XSSFWorkbook(fIP);
         for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
             XSSFSheet spreadsheet = workbook.getSheetAt(i);
+            System.out.println(spreadsheet.getSheetName());
             Iterator<Row> rowIterator = spreadsheet.iterator();
             while (rowIterator.hasNext()) {
                 row = (XSSFRow) rowIterator.next();
