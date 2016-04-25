@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="tibcrypt">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/ConfigParser/libs/tibcrypt.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

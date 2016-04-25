@@ -1,4 +1,4 @@
-package config_parser;
+package xml_parser;
 
 import com.tibco.security.AXSecurityException;
 import com.tibco.security.ObfuscationEngine;

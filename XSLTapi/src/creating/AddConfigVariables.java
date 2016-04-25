@@ -1,10 +1,11 @@
 package creating;
 
+import xml_parser.ConfigParser;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.xssf.usermodel.*;
-import config_parser.*;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import static org.apache.poi.ss.usermodel.CellStyle.BORDER_MEDIUM;
 
@@ -14,11 +15,13 @@ import static org.apache.poi.ss.usermodel.CellStyle.BORDER_MEDIUM;
 public class AddConfigVariables {
 
     private XSSFCellStyle borderStyle;
+    private XSSFCellStyle aligmentStyle;
     private static int rowCount = 0;
 
-    public AddConfigVariables(XSSFWorkbook releaseNotes, String name) {
+    public AddConfigVariables(XSSFWorkbook releaseNotes, String name,ConfigParser cfg) {
         XSSFSheet earArtifacts = releaseNotes.createSheet("EAR " + name);
         borderStyle = getBorderStyle(releaseNotes);
+        aligmentStyle = getAligmentStyle(releaseNotes);
         XSSFRow legend = earArtifacts.createRow(rowCount);
         legend.createCell(0).setCellValue("Ear name: ");
         legend.createCell(1).setCellValue(name);
@@ -29,10 +32,9 @@ public class AddConfigVariables {
         createBorderCell(header, 2, "Value");
         createBorderCell(header, 3, "Status");
 
-
-        ConfigParser cfg = new ConfigParser();
         for (Map.Entry<String, String> entry : cfg.getGlobalWars().entrySet()) {
             XSSFRow row = earArtifacts.createRow(++rowCount);
+            row.setRowStyle(aligmentStyle);
             row.createCell(1).setCellValue(entry.getKey());
             XSSFCell cell = row.createCell(2);
             cell.setCellValue(entry.getValue());
@@ -40,19 +42,24 @@ public class AddConfigVariables {
             row.createCell(3).setCellValue("New");
         }
 
-        for (Map.Entry<String, TreeMap<String, String>> entry : cfg.getParWars().entrySet()) {
+        for (Map.Entry<String, LinkedHashMap<String, String>> entry : cfg.getParWars().entrySet()) {
             XSSFRow row = earArtifacts.createRow(rowCount+=3);
             row.setRowStyle(borderStyle);
             createBorderCell(row, 0, entry.getKey());
             createBorderCell(row, 1, "Name");
             createBorderCell(row, 2, "Value");
             createBorderCell(row, 3, "Status");
-            for (TreeMap.Entry<String, String> entrySet : entry.getValue().entrySet()) {
+            for (Map.Entry<String, String> entrySet : entry.getValue().entrySet()) {
                 XSSFRow subRow = earArtifacts.createRow(++rowCount);
-                subRow.createCell(1).setCellValue(entrySet.getKey());
-                XSSFCell cell = subRow.createCell(2);
-                cell.setCellValue(entrySet.getValue());
-                cell.setCellStyle(getWrapStyle(releaseNotes));
+                subRow.setRowStyle(aligmentStyle);
+                if (entrySet.getKey().startsWith("%")) {
+                    subRow.createCell(0).setCellValue(entrySet.getKey().replace("%", ""));
+                    continue;
+                }
+                XSSFCell cellName = subRow.createCell(1);
+                cellName.setCellValue(entrySet.getKey());
+                XSSFCell cellValue = subRow.createCell(2);
+                cellValue.setCellValue(entrySet.getValue());
                 subRow.createCell(3).setCellValue("New");
             }
         }
@@ -81,6 +88,14 @@ public class AddConfigVariables {
 
     private XSSFCellStyle getWrapStyle(XSSFWorkbook releaseNotes) {
         XSSFCellStyle style = releaseNotes.createCellStyle();
+        style.setWrapText(true);
+        style.setVerticalAlignment(VerticalAlignment.TOP);
+        return style;
+    }
+
+    private XSSFCellStyle getAligmentStyle(XSSFWorkbook releaseNotes) {
+        XSSFCellStyle style = releaseNotes.createCellStyle();
+        style.setVerticalAlignment(VerticalAlignment.TOP);
         style.setWrapText(true);
         return style;
     }

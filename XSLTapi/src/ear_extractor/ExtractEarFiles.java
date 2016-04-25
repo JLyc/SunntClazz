@@ -1,4 +1,4 @@
-package file_analyzer;
+package ear_extractor;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -25,11 +25,13 @@ public class ExtractEarFiles implements Closeable {
     private List<Path> zipFiles;
     private List<Path> processes;
     private List<Path> jdbcs;
+    private List<Path> files;
     private Path path;
 
-    PathMatcher archivesPattern = FileSystems.getDefault().getPathMatcher("glob:**.{ear,sar}");
+    PathMatcher archivesPattern = FileSystems.getDefault().getPathMatcher("glob:**.{ear,sar,par}");
     PathMatcher processesPattern = FileSystems.getDefault().getPathMatcher("glob:**.{process}");
     PathMatcher jdbcPattern = FileSystems.getDefault().getPathMatcher("glob:**.{sharedjdbc}");
+    PathMatcher filesPattern = FileSystems.getDefault().getPathMatcher("glob:**.*");
 
     public ExtractEarFiles(Path path) throws IOException {
         this.path = path;
@@ -49,6 +51,25 @@ public class ExtractEarFiles implements Closeable {
             processes = getAllFiles(removeExtension(path), processesPattern);
         }
         return processes;
+    }
+
+    public List<Path> getFiles(Path path) throws IOException {
+        if (files == null) {
+            files = Files.walk(removeExtension(path)).filter(new Predicate<Path>() {
+                @Override
+                public boolean test(Path path) {
+                    if (filesPattern.matches(path)) {
+                        if (archivesPattern.matches(path) || path.endsWith("TIBCO.xml") || path.endsWith(".folder")) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }).collect(Collectors.<Path>toList());
+        }
+        return files;
     }
 
     public List<Path> getJDBCs(Path path) throws IOException {

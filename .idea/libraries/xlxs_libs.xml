@@ -1,0 +1,28 @@
+<component name="libraryTable">
+  <library name="xlxs_libs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/commons-io-2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/dom4j-1.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/jaxen-1.1-beta-6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/jaxme-api-0.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/jsr173_1.0_api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/jxl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/msv-20030807.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/poi-3.14-20160307.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/poi-ooxml-3.14-20160307.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/poi-ooxml-schemas-3.14-20160307.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/pull-parser-2.1.10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/relaxngDatatype-20030807.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/slf4j-api-1.4.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/slf4j-simple-1.4.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/tibcrypt.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/xmlbeans-2.6.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/xpp3-1.1.3.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/xsdlib-20030807.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/XSLTapi/lib/commons-io-2.5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

@@ -1,4 +1,4 @@
-package config_parser;
+package xml_parser;
 
 import com.tibco.security.AXSecurityException;
 import com.tibco.security.ObfuscationEngine;
@@ -13,10 +13,11 @@ public class ParVariables {
     private static final String PREFIX_NS = "ns";
     private static final String NAME_SPACE_URL = "http://www.tibco.com/xmlns/ApplicationManagement";
     private static final String NS = "/" + PREFIX_NS + ":";
-    private TreeMap<String, TreeMap<String, String>> parsWars = new TreeMap<>();
+    private LinkedHashMap<String, LinkedHashMap<String, String>> parsWars = new LinkedHashMap<>();
     private Map<String, String> namespaceUris = new HashMap<>();
 
     private Document document;
+    private String deliminiter = "-";
 
     public ParVariables(Document document) {
         this.document = document;
@@ -29,28 +30,28 @@ public class ParVariables {
     }
 
     private void parseParVariables(List list) {
-        parsWars = new TreeMap<>();
+        parsWars = new LinkedHashMap<>();
         for (Iterator iter = list.iterator(); iter.hasNext(); ) {
             Element child = (Element) iter.next();
             for (int i = 0, size = child.nodeCount(); i < size; i++) {
                 Node node = child.node(i);
                 if (node instanceof Element) {
-                    parsWars.put(((Element) node).attribute("name").getValue(), new TreeMap<String, String>());
+                    parsWars.put(((Element) node).attribute("name").getValue(), new LinkedHashMap<String, String>());
                 }
             }
         }
 
-        for (Map.Entry<String, TreeMap<String, String>> parName : parsWars.entrySet()) {
+        for (Map.Entry<String, LinkedHashMap<String, String>> parName : parsWars.entrySet()) {
             String nameOfPar = parName.getKey();
-            parsWars.get(nameOfPar).put("%basic", "Table");
+            parsWars.get(nameOfPar).put("%basic", deliminiter);
             mainVariables(nameOfPar);
-            parsWars.get(nameOfPar).put("%bindings", "Table");
+            parsWars.get(nameOfPar).put("%bindings", deliminiter);
             bindingsVariables(nameOfPar);
-            parsWars.get(nameOfPar).put("%runtime", "Table");
+            parsWars.get(nameOfPar).put("%runtime", deliminiter);
             nvpairVariables(nameOfPar,"Runtime Variables");
-            parsWars.get(nameOfPar).put("%SDK_properies", "Table");
+            parsWars.get(nameOfPar).put("%SDK_properies", deliminiter);
             nvpairVariables(nameOfPar,"Adapter SDK Properties");
-            parsWars.get(nameOfPar).put("%bwProcesses", "Table");
+            parsWars.get(nameOfPar).put("%bwProcesses", deliminiter);
             bwProcessesVariables(nameOfPar);
         }
     }
@@ -158,7 +159,7 @@ public class ParVariables {
         return nvpairs;
     }
 
-    public TreeMap<String, TreeMap<String, String>> getParsWars() {
+    public LinkedHashMap<String, LinkedHashMap<String, String>> getParsWars() {
         return parsWars;
     }
 }
