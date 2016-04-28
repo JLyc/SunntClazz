@@ -1,5 +1,6 @@
 package creating;
 
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.xssf.usermodel.*;
 
 import java.nio.file.Path;
@@ -14,10 +15,13 @@ import static org.apache.poi.ss.usermodel.CellStyle.BORDER_MEDIUM;
 public class AddBWDefinition {
     private XSSFCellStyle borderStyle;
     private static int rowCount = 0;
+    private XSSFCellStyle boltStyle;
 
     public AddBWDefinition(XSSFWorkbook releaseNotes, String name, List<Path> files) {
         XSSFSheet bwArtifacts = releaseNotes.createSheet("BW " + name);
         borderStyle = getBorderStyle(releaseNotes);
+        boltStyle = getBoldStyle(releaseNotes);
+
         XSSFRow legend = bwArtifacts.createRow(rowCount);
         legend.createCell(0).setCellValue("BW project name: ");
         legend.createCell(1).setCellValue(name);
@@ -54,18 +58,26 @@ public class AddBWDefinition {
             for (int i = index; i < path.getNameCount() - 1; i++) {
                 if(i!=index){
                     row = bwArtifacts.createRow(++rowCount);}
-                row.createCell(i - subpathIndex).setCellValue(String.valueOf(path.getName(i)));
+                createBoldCell(row, (i - subpathIndex), String.valueOf(path.getName(i)));
+//                row.createCell(i - subpathIndex).setCellValue(String.valueOf(path.getName(i)));
                 skippRow = false;
             }
             if(!skippRow){
             row = bwArtifacts.createRow(++rowCount);}
+//            createBoldCell(row,8,String.valueOf(path.getFileName()));
             row.createCell(8).setCellValue(String.valueOf(path.getFileName()));
             row.createCell(9).setCellValue("new");
             prewiousPah = path;
         }
         bwArtifacts.autoSizeColumn(7);
         bwArtifacts.autoSizeColumn(8);
-
+        bwArtifacts.setColumnWidth(0, 1000);
+        bwArtifacts.setColumnWidth(1, 1000);
+        bwArtifacts.setColumnWidth(2, 1000);
+        bwArtifacts.setColumnWidth(3, 1000);
+        bwArtifacts.setColumnWidth(4, 1000);
+        bwArtifacts.setColumnWidth(5, 1000);
+        bwArtifacts.setColumnWidth(6, 1000);
     }
 
     private void createBorderCell(XSSFRow ears, int position, String text) {
@@ -79,6 +91,20 @@ public class AddBWDefinition {
         font.setBold(true);
         XSSFCellStyle style = releaseNotes.createCellStyle();
         style.setBorderBottom(BORDER_MEDIUM);
+        style.setFont(font);
+        return style;
+    }
+
+    private void createBoldCell(XSSFRow ears, int position, String text) {
+        XSSFCell cell = ears.createCell(position);
+        cell.setCellValue(text);
+        cell.setCellStyle(boltStyle);
+    }
+
+    private XSSFCellStyle getBoldStyle(XSSFWorkbook releaseNotes) {
+        XSSFFont font = releaseNotes.createFont();
+        font.setBold(true);
+        XSSFCellStyle style = releaseNotes.createCellStyle();
         style.setFont(font);
         return style;
     }

@@ -35,7 +35,7 @@ public class CreateXLSX {
     public static XSSFCellStyle style;
 
     public static void main(String[] args) throws IOException {
-        Path fs = Paths.get("C:\\Java\\Projects\\SunntClazz\\XSLTapi\\resources\\test_group");
+        Path fs = Paths.get("D:\\SunntClazz\\XSLTapi\\resources\\test_group");
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         new AddSummary(workbook);
