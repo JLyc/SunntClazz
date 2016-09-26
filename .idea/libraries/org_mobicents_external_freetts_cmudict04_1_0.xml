@@ -1,6 +1,5 @@
 <component name="libraryTable">
-  <library name="org.mobicents.external.freetts:cmudict04:1.0" type="repository">
-    <properties maven-id="org.mobicents.external.freetts:cmudict04:1.0" />
+  <library name="org.mobicents.external.freetts:cmudict04:1.0">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/TextToSpeach_0.2/lib/cmudict04-1.0.jar!/" />
     </CLASSES>

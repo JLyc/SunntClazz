@@ -23,11 +23,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="TextToSpeach_0.2" />
+        <module name="TTS" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="TextToSpeach_0.1" target="1.5" />
       <module name="TextToSpeach_0.2" target="1.5" />
+      <module name="TTS" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

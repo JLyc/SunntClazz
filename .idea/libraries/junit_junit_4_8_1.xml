@@ -1,6 +1,5 @@
 <component name="libraryTable">
-  <library name="junit:junit:4.8.1" type="repository">
-    <properties maven-id="junit:junit:4.8.1" />
+  <library name="junit:junit:4.8.1">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/TextToSpeach_0.2/lib/junit-4.8.1.jar!/" />
     </CLASSES>

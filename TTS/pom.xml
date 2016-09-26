@@ -5,8 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>groupId</groupId>
-    <artifactId>TextToSpeach_0.2</artifactId>
+    <artifactId>TTS</artifactId>
     <version>1.0-SNAPSHOT</version>
+
     <!-- https://mvnrepository.com/artifact/org.daisy.pipeline.modules/tts-common -->
     <dependencies>
         <dependency>
@@ -16,6 +17,4 @@
         </dependency>
     </dependencies>
 
-
-    
 </project>

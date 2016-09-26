@@ -1,0 +1,434 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Oracle JAX-WS 2.1.3-07/10/2008 08:41 PM(bt). -->
+<xs:schema xmlns:tns="http://ws.web.edocs.onedms.telecom.sk.atos.net/"
+           xmlns:ns1="http://data.bean.ejb.app.edocs.onedms.telecom.sk.atos.net/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0"
+           targetNamespace="http://ws.web.edocs.onedms.telecom.sk.atos.net/">
+    <xs:import namespace="http://data.bean.ejb.app.edocs.onedms.telecom.sk.atos.net/" schemaLocation="WS_eDocs2.xsd"/>
+    <xs:element name="ApplicationFault" nillable="true" type="tns:applicationFaultBean"/>
+    <xs:element name="addCRMDocument" type="tns:addCRMDocument"/>
+    <xs:element name="addCRMDocumentResponse" type="tns:addCRMDocumentResponse"/>
+    <xs:element name="addCRMDocumentWithMetadata" type="tns:addCRMDocumentWithMetadata"/>
+    <xs:element name="addCRMDocumentWithMetadataResponse" type="tns:addCRMDocumentWithMetadataResponse"/>
+    <xs:element name="addDocument" type="tns:addDocument"/>
+    <xs:element name="addDocumentResponse" type="tns:addDocumentResponse"/>
+    <xs:element name="addDocumentWithMetadata" type="tns:addDocumentWithMetadata"/>
+    <xs:element name="addDocumentWithMetadataResponse" type="tns:addDocumentWithMetadataResponse"/>
+    <xs:element name="addInvoiceWithMetadata" type="tns:addInvoiceWithMetadata"/>
+    <xs:element name="addInvoiceWithMetadataFromTemp" type="tns:addInvoiceWithMetadataFromTemp"/>
+    <xs:element name="addInvoiceWithMetadataFromTempResponse" type="tns:addInvoiceWithMetadataFromTempResponse"/>
+    <xs:element name="addInvoiceWithMetadataResponse" type="tns:addInvoiceWithMetadataResponse"/>
+    <xs:element name="getCRMDocumentContent" type="tns:getCRMDocumentContent"/>
+    <xs:element name="getCRMDocumentContentResponse" type="tns:getCRMDocumentContentResponse"/>
+    <xs:element name="getCRMDocumentWithMetadata" type="tns:getCRMDocumentWithMetadata"/>
+    <xs:element name="getCRMDocumentWithMetadataResponse" type="tns:getCRMDocumentWithMetadataResponse"/>
+    <xs:element name="getCRMDocumentsMetadata" type="tns:getCRMDocumentsMetadata"/>
+    <xs:element name="getCRMDocumentsMetadataResponse" type="tns:getCRMDocumentsMetadataResponse"/>
+    <xs:element name="getDocumentContent" type="tns:getDocumentContent"/>
+    <xs:element name="getDocumentContentResponse" type="tns:getDocumentContentResponse"/>
+    <xs:element name="getDocumentContentWithMetadata" type="tns:getDocumentContentWithMetadata"/>
+    <xs:element name="getDocumentContentWithMetadataResponse" type="tns:getDocumentContentWithMetadataResponse"/>
+    <xs:element name="getInvoiceContent" type="tns:getInvoiceContent"/>
+    <xs:element name="getInvoiceContentResponse" type="tns:getInvoiceContentResponse"/>
+    <xs:element name="getInvoiceContentWithMetadata" type="tns:getInvoiceContentWithMetadata"/>
+    <xs:element name="getInvoiceContentWithMetadataResponse" type="tns:getInvoiceContentWithMetadataResponse"/>
+    <xs:element name="ping" type="tns:ping"/>
+    <xs:element name="pingResponse" type="tns:pingResponse"/>
+    <xs:element name="setCRMDocumentMetadata" type="tns:setCRMDocumentMetadata"/>
+    <xs:element name="setCRMDocumentMetadataResponse" type="tns:setCRMDocumentMetadataResponse"/>
+    <xs:element name="setDocumentMetadata" type="tns:setDocumentMetadata"/>
+    <xs:element name="setDocumentMetadataResponse" type="tns:setDocumentMetadataResponse"/>
+    <xs:complexType name="ping">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:complexType name="pingResponse">
+        <xs:sequence>
+            <xs:element name="pingResult" type="xs:string" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="addDocument">
+        <xs:sequence>
+            <xs:element name="docBarCode" type="xs:string" form="qualified" minOccurs="0"/>
+            <xs:element name="fnDoc" type="tns:FNDocumentType" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNDocumentType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="fileName" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="mimeType" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="pages" type="tns:PageType" form="qualified" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PageType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="data" type="xs:base64Binary" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="addDocumentResponse">
+        <xs:sequence>
+            <xs:element name="addDocumentResult" type="tns:FNResultType" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNResultType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="resultStatus" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="applicationFaultBean" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="errorNumber" type="xs:int" form="qualified" nillable="true"/>
+            <xs:element name="errorMessage" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getCRMDocumentWithMetadata">
+        <xs:sequence>
+            <xs:element name="docURI" type="xs:string" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getCRMDocumentWithMetadataResponse">
+        <xs:sequence>
+            <xs:element name="getCRMDocumentWithMetadataResult" type="tns:FNResultCRMDocumentWithMetadataType"
+                        form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNResultCRMDocumentWithMetadataType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="opResult" type="tns:FNResultType" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="fnDoc" type="tns:FNDocumentType" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="docCRMMetadata" type="tns:FNCRMMetadataType" form="qualified" nillable="true"
+                        minOccurs="0"/>
+            <xs:element name="digPodpis" type="xs:int" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNCRMMetadataType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="docClass" type="xs:string" form="qualified"/>
+            <xs:element name="docCode" type="xs:string" form="qualified"/>
+            <xs:element name="docType" type="xs:string" form="qualified"/>
+            <xs:element name="docName" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="sensitivity" type="xs:string" form="qualified"/>
+            <xs:element name="selCode" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="customerAccountList" type="tns:FNCRMCustomerAccountType" form="qualified"
+                        maxOccurs="unbounded"/>
+            <xs:element name="billingProfileList" type="tns:FNCRMBillingProfileType" form="qualified" nillable="true"
+                        minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="entityList" type="tns:FNCRMEntityType" form="qualified" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded"/>
+            <xs:element name="doc1Massprint" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNCRMCustomerAccountType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="custAcctCode" type="xs:string" form="qualified"/>
+            <xs:element name="firstName" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="lastName" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="govCode" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="accountSegment" type="xs:string" form="qualified"/>
+            <xs:element name="empContact" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="empContact2" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="accountType" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="address" type="tns:FNCRMAddressType" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNCRMAddressType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="streetName" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="houseNumber" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="blockNumber" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="quarterName" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="quarterNumber" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="town" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="countryCode" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="countryCodeZip" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="postoffice" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNCRMBillingProfileType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="billAcctCode" type="xs:string" form="qualified"/>
+            <xs:element name="firstName" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="lastName" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="fiscalCode" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="address" type="tns:FNCRMAddressType" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNCRMEntityType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="entityID" type="xs:string" form="qualified"/>
+            <xs:element name="entityType" type="xs:string" form="qualified"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="addCRMDocumentWithMetadata">
+        <xs:sequence>
+            <xs:element name="docURI" type="xs:string" form="qualified" minOccurs="0"/>
+            <xs:element name="docCRMMetadata" type="tns:FNCRMMetadataType" form="qualified" minOccurs="0"/>
+            <xs:element name="fnDoc" type="tns:FNDocumentType" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="addCRMDocumentWithMetadataResponse">
+        <xs:sequence>
+            <xs:element name="addCRMDocumentWithMetadataResult" type="tns:FNResultType" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getCRMDocumentContent">
+        <xs:sequence>
+            <xs:element name="docURI" type="xs:string" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getCRMDocumentContentResponse">
+        <xs:sequence>
+            <xs:element name="getCRMDocumentContentResult" type="tns:FNResultCRMDocumentContentType" form="qualified"
+                        minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNResultCRMDocumentContentType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="opResult" type="tns:FNResultType" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="fnDoc" type="tns:FNDocumentType" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getDocumentContent">
+        <xs:sequence>
+            <xs:element name="docBarCode" type="xs:string" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getDocumentContentResponse">
+        <xs:sequence>
+            <xs:element name="getDocumentContentResult" type="tns:FNResultDocumentType" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNResultDocumentType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="opResult" type="tns:FNResultType" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="fnDoc" type="tns:FNDocumentType" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="setDocumentMetadata">
+        <xs:sequence>
+            <xs:element name="docMetadata" type="tns:FNMetadataType" form="qualified" minOccurs="0"/>
+            <xs:element name="custVerifyData" type="tns:FNVerifyDataType" form="qualified" minOccurs="0"
+                        maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNMetadataType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="docType" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="docBarCode" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="mainIdentifierType" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="mainIdentifierValue" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="docStatus" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNVerifyDataType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="sourceValue" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="verificationValue" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="verificationResult" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="setDocumentMetadataResponse">
+        <xs:sequence>
+            <xs:element name="setDocumentMetadataResult" type="tns:FNResultType" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getDocumentContentWithMetadata">
+        <xs:sequence>
+            <xs:element name="docBarCode" type="xs:string" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getDocumentContentWithMetadataResponse">
+        <xs:sequence>
+            <xs:element name="getDocumentContentWithMetadataResult" type="tns:FNResultDocumentWithMetadataType"
+                        form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNResultDocumentWithMetadataType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="opResult" type="tns:FNResultType" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="fnDoc" type="tns:FNDocumentType" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="fnMetadata" type="tns:FNMobilMetadataType" form="qualified" nillable="true"
+                        minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNMobilMetadataType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="kodTypuDokumentu" type="xs:int" form="qualified" minOccurs="0"/>
+            <xs:element name="nazovTypuDokumentu" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="docBarCode" type="xs:string" form="qualified"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getInvoiceContentWithMetadata">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string" form="qualified" minOccurs="0"/>
+            <xs:element name="variabSymbol" type="xs:string" form="qualified" minOccurs="0"/>
+            <xs:element name="barcode" type="xs:string" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getInvoiceContentWithMetadataResponse">
+        <xs:sequence>
+            <xs:element name="getInvoiceContentWithMetadataResult" type="tns:FNResultInvoiceWithMetadataType"
+                        form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNResultInvoiceWithMetadataType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="fnResultInvoice" type="tns:FNResultInvoiceType" form="qualified"/>
+            <xs:element name="fnInvoice" type="tns:FNInvoiceType" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="fnInvoiceMetadata" type="tns:FNInvoiceMetadataType" form="qualified" nillable="true"
+                        minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNResultInvoiceType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="resultStatus" type="xs:string" form="qualified"/>
+            <xs:element name="invoiceID" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNInvoiceType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="fileName" type="xs:string" form="qualified"/>
+            <xs:element name="mimeType" type="xs:string" form="qualified"/>
+            <xs:element name="data" type="xs:base64Binary" form="qualified"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNInvoiceMetadataType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="contractId" type="xs:long" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="customerId" type="xs:long" form="qualified"/>
+            <xs:element name="customerCode" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="telCislo" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="icoRC" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="cisloFakt" type="xs:long" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="variabSymbol" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="datFakturacie" type="xs:string" form="qualified"/>
+            <xs:element name="datVystavenia" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="datSplatnosti" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="obdobie" type="xs:string" form="qualified"/>
+            <xs:element name="suma" type="xs:double" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="kodTypDok" type="xs:int" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="typFakt" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="cestaPrehliadac" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="fnId" type="xs:long" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="email" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="faktBarcode" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getInvoiceContent">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string" form="qualified" minOccurs="0"/>
+            <xs:element name="variabSymbol" type="xs:string" form="qualified" minOccurs="0"/>
+            <xs:element name="barcode" type="xs:string" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getInvoiceContentResponse">
+        <xs:sequence>
+            <xs:element name="getInvoiceContentResult" type="tns:FNResultInvoiceContentType" form="qualified"
+                        minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNResultInvoiceContentType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="fnResultInvoice" type="tns:FNResultInvoiceType" form="qualified"/>
+            <xs:element name="fnInvoice" type="tns:FNInvoiceType" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="addInvoiceWithMetadata">
+        <xs:sequence>
+            <xs:element name="fnInvoiceMetadata" type="tns:FNInvoiceMetadataType" form="qualified" minOccurs="0"/>
+            <xs:element name="fnInvoice" type="tns:FNInvoiceType" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="addInvoiceWithMetadataResponse">
+        <xs:sequence>
+            <xs:element name="addInvoiceWithMetadataResult" type="tns:FNResultInvoiceType" form="qualified"
+                        minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="addDocumentWithMetadata">
+        <xs:sequence>
+            <xs:element name="docMetadata" type="tns:FNMetadataType" form="qualified" minOccurs="0"/>
+            <xs:element name="custVerifyData" type="tns:FNVerifyDataType" form="qualified" minOccurs="0"
+                        maxOccurs="unbounded"/>
+            <xs:element name="fnDoc" type="tns:FNDocumentType" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="addDocumentWithMetadataResponse">
+        <xs:sequence>
+            <xs:element name="addDocumentWithMetadataResult" type="tns:FNResultType" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="addCRMDocument">
+        <xs:sequence>
+            <xs:element name="docURI" type="xs:string" form="qualified" minOccurs="0"/>
+            <xs:element name="fnDoc" type="tns:FNDocumentType" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="addCRMDocumentResponse">
+        <xs:sequence>
+            <xs:element name="addCRMDocumentResult" type="tns:FNResultType" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="setCRMDocumentMetadata">
+        <xs:sequence>
+            <xs:element name="docURI" type="xs:string" form="qualified" minOccurs="0"/>
+            <xs:element name="docCRMMetadata" type="tns:FNCRMMetadataType" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="setCRMDocumentMetadataResponse">
+        <xs:sequence>
+            <xs:element name="setCRMDocumentMetadataResult" type="tns:FNResultType" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getCRMDocumentsMetadata">
+        <xs:sequence>
+            <xs:element name="docURIList" type="xs:string" form="qualified" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="propNameList" type="tns:FNCRMPropertyType" form="qualified" minOccurs="0"
+                        maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNCRMPropertyType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string" form="qualified"/>
+            <xs:element name="value" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getCRMDocumentsMetadataResponse">
+        <xs:sequence>
+            <xs:element name="getCRMDocumentsMetadataResult" type="tns:FNResultCRMDocumentsMetadataType"
+                        form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNResultCRMDocumentsMetadataType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="opResult" type="tns:FNResultType" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="crmDocumentsMetadataList" type="tns:FNCRMDocumentsMetadataItemType" form="qualified"
+                        nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FNCRMDocumentsMetadataItemType" final="extension restriction">
+        <xs:sequence>
+            <xs:element name="docCode" type="xs:string" form="qualified"/>
+            <xs:element name="opResult" type="tns:FNResultType" form="qualified"/>
+            <xs:element name="errorDesc" type="xs:string" form="qualified" nillable="true" minOccurs="0"/>
+            <xs:element name="propList" type="tns:FNCRMPropertyType" form="qualified" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded"/>
+            <xs:element name="docCRMMetadata" type="tns:FNCRMMetadataType" form="qualified" nillable="true"
+                        minOccurs="0"/>
+            <xs:element name="digPodpis" type="xs:int" form="qualified" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="addInvoiceWithMetadataFromTemp">
+        <xs:sequence>
+            <xs:element name="barcode" type="xs:string" form="qualified" minOccurs="0"/>
+            <xs:element name="fnInvoiceMetadata" type="tns:FNInvoiceMetadataType" form="qualified" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="addInvoiceWithMetadataFromTempResponse">
+        <xs:sequence>
+            <xs:element name="addInvoiceWithMetadataResult" type="tns:FNResultInvoiceType" form="qualified"
+                        minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

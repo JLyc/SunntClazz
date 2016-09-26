@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Oracle JAX-WS 2.1.3-07/10/2008 08:41 PM(bt). -->
+  <xs:schema xmlns:ns1="http://ws.web.edocs.onedms.telecom.sk.atos.net/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://data.bean.ejb.app.edocs.onedms.telecom.sk.atos.net/">
+    <xs:import namespace="http://ws.web.edocs.onedms.telecom.sk.atos.net/" schemaLocation="WS_eDocs1.xsd" />
+    <xs:element name="appFaultBean" type="ns1:applicationFaultBean" />
+    <xs:element name="fnCRMAddress" type="ns1:FNCRMAddressType" />
+    <xs:element name="fnCRMBillingProfile" type="ns1:FNCRMBillingProfileType" />
+    <xs:element name="fnCRMCustomerAccount" type="ns1:FNCRMCustomerAccountType" />
+    <xs:element name="fnCRMDocumentsMetadataItem" type="ns1:FNCRMDocumentsMetadataItemType" />
+    <xs:element name="fnCRMEntity" type="ns1:FNCRMEntityType" />
+    <xs:element name="fnCRMMetadata" type="ns1:FNCRMMetadataType" />
+    <xs:element name="fnCRMProperty" type="ns1:FNCRMPropertyType" />
+    <xs:element name="fnDocument" type="ns1:FNDocumentType" />
+    <xs:element name="fnInvoice" type="ns1:FNInvoiceType" />
+    <xs:element name="fnInvoiceMetadata" type="ns1:FNInvoiceMetadataType" />
+    <xs:element name="fnMetadata" type="ns1:FNMetadataType" />
+    <xs:element name="fnMobilMetadata" type="ns1:FNMobilMetadataType" />
+    <xs:element name="fnResult" type="ns1:FNResultType" />
+    <xs:element name="fnResultCRMDocumentContent" type="ns1:FNResultCRMDocumentContentType" />
+    <xs:element name="fnResultCRMDocumentWithMetadata" type="ns1:FNResultCRMDocumentWithMetadataType" />
+    <xs:element name="fnResultCRMDocumentsMetadata" type="ns1:FNResultCRMDocumentsMetadataType" />
+    <xs:element name="fnResultDocument" type="ns1:FNResultDocumentType" />
+    <xs:element name="fnResultDocumentWithMetadata" type="ns1:FNResultDocumentWithMetadataType" />
+    <xs:element name="fnResultInvoice" type="ns1:FNResultInvoiceType" />
+    <xs:element name="fnResultInvoiceContent" type="ns1:FNResultInvoiceContentType" />
+    <xs:element name="fnResultInvoiceWithMetadata" type="ns1:FNResultInvoiceWithMetadataType" />
+    <xs:element name="fnVerifyData" type="ns1:FNVerifyDataType" />
+    <xs:element name="page" type="ns1:PageType" />
+  </xs:schema>
